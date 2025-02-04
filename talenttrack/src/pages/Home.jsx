@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Typography, Container, Box, Grid, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
 
 function Home() {
   return (
@@ -17,6 +18,7 @@ function Home() {
         paddingBottom: 4,
       }}
     >
+      <Navbar />
       <Container sx={{maxWidth:"lg",margin:"80px"}}>
         <Paper sx={{ padding: 4, boxShadow: 3, borderRadius: 2 }}>
           <Typography

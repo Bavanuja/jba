@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Typography, Button, Box, Paper } from "@mui/material";
+import Navbar from "./Navbar";
 
 function MyJobs() {
   const [jobs, setJobs] = useState([]);
@@ -33,7 +34,9 @@ function MyJobs() {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+    <div>
+    <Navbar />
+    <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem",width:"95vw" }}>
       <Paper sx={{ padding: 4, maxWidth: 800, width: "100%" }}>
         <Typography variant="h4" textAlign="center" sx={{ marginBottom: "1rem" }}>
           My Posted Jobs
@@ -62,6 +65,7 @@ function MyJobs() {
         )}
       </Paper>
     </Box>
+    </div>
   );
 }
 

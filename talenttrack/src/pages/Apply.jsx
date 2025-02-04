@@ -33,16 +33,33 @@ function Apply() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     if (!formData.resume) {
       alert("Please upload your resume.");
       return;
     }
-
-    // Simulate submission (You can replace this with API call)
+  
+    const storedApplications = JSON.parse(localStorage.getItem("applications")) || [];
+    
+    const newApplication = {
+      jobId: job.id,
+      jobTitle: job.title,
+      applicantName: formData.name,
+      applicantEmail: formData.email,
+      applicantPhone: formData.phone,
+      applicantAddress: formData.address,
+      applicantLinkedIn: formData.linkedIn,
+      applicantCoverLetter: formData.coverLetter,
+      jobPosterId: job.postedBy, // ID of the user who posted the job
+    };
+  
+    storedApplications.push(newApplication);
+    localStorage.setItem("applications", JSON.stringify(storedApplications));
+  
     alert("Application submitted successfully!");
-    navigate("/"); // Redirect back to job listings
+    navigate("/joblist"); // Redirect to home page
   };
+  
 
   if (!job) {
     return <Typography textAlign="center" sx={{ marginTop: "2rem" }}>Loading job details...</Typography>;

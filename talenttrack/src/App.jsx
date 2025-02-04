@@ -8,6 +8,8 @@ import PostJob from "./pages/PostJob";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyJobs from "./pages/MyJobs";
+import Profile from "./pages/Profile";
+import Dashboard from "./pages/DashBoard";
 
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
         <Route path="/apply/:id" element={<Apply />} />
         <Route path="/postjob" element={<PostJob />} />
         <Route path="/myjobs" element={<MyJobs />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
