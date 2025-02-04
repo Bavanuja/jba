@@ -100,6 +100,7 @@ function Home() {
                 <Button
                   variant="outlined"
                   color="primary"
+                  component={Link} to="/postjob"
                   sx={{ fontSize: "14px", fontWeight: "bold" }}
                 >
                   Post a Job
@@ -123,18 +124,18 @@ function Home() {
                     color: "#3f51b5",
                   }}
                 >
-                  Apply for Jobs
+                  View my Jobs
                 </Typography>
                 <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                  Found a job that fits your skills? Apply directly through the
-                  platform.
+                  View your own posted jobs.
                 </Typography>
                 <Button
                   variant="outlined"
                   color="primary"
+                  component={Link} to="/myjobs"
                   sx={{ fontSize: "14px", fontWeight: "bold" }}
                 >
-                  Apply Now
+                  My Jobs
                 </Button>
               </Paper>
             </Grid>

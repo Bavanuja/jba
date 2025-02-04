@@ -1,117 +1,148 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { TextField, Button, Typography, Card, CardContent } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import { Card, CardContent, Typography, TextField, Button, Box, Paper } from "@mui/material";
 
 function Apply() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    resume: "",
-    coverLetter: ""
+    address: "",
+    linkedIn: "",
+    coverLetter: "",
+    resume: null, // Resume file
   });
 
   useEffect(() => {
-    fetch("/jobs.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const selectedJob = data.find((job) => job.id === parseInt(id));
-        setJob(selectedJob);
-      })
-      .catch((error) => console.error("Error loading job details:", error));
+    const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    const selectedJob = storedJobs.find((job) => job.id === parseInt(id));
+    setJob(selectedJob);
   }, [id]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, resume: e.target.files[0] });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Application Submitted:", formData);
+
+    if (!formData.resume) {
+      alert("Please upload your resume.");
+      return;
+    }
+
+    // Simulate submission (You can replace this with API call)
     alert("Application submitted successfully!");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      resume: "",
-      coverLetter: ""
-    });
+    navigate("/"); // Redirect back to job listings
   };
 
   if (!job) {
-    return <Typography>Loading job details...</Typography>;
+    return <Typography textAlign="center" sx={{ marginTop: "2rem" }}>Loading job details...</Typography>;
   }
 
   return (
-    <div style={{ padding: "2rem", display: "flex", justifyContent: "center" }}>
-      <Card variant="outlined" sx={{ maxWidth: 600, padding: 3 }}>
-        <CardContent>
-          <Typography variant="h5">{job.title}</Typography>
-          <Typography color="textSecondary">{job.company}</Typography>
-          <Typography color="textSecondary">{job.location}</Typography>
-          <Typography variant="body1" sx={{ marginTop: 2 }}>
-            <strong>Salary:</strong> {job.salary}
-          </Typography>
-
-          <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-            <TextField
-              fullWidth
-              label="Full Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Phone Number"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Resume (Link to Drive or PDF)"
-              name="resume"
-              value={formData.resume}
-              onChange={handleChange}
-              required
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Cover Letter"
-              name="coverLetter"
-              multiline
-              rows={4}
-              value={formData.coverLetter}
-              onChange={handleChange}
-              required
-              margin="normal"
-            />
-            <Button variant="contained" color="primary" type="submit" sx={{ marginTop: 2 }}>
-              Submit Application
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem", width: "100vw" }}>
+      <Paper sx={{ padding: 4, maxWidth: 600, width: "100%" }}>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h5" sx={{ fontWeight: "bold", color: "#1976D2" }}>
+              Apply for {job.title}
+            </Typography>
+            <Typography color="textSecondary" sx={{ fontSize: "1.1rem", marginTop: 1 }}>
+              {job.company}
+            </Typography>
+            <form onSubmit={handleSubmit} style={{ marginTop: "2rem" }}>
+              <TextField
+                label="Full Name"
+                variant="outlined"
+                fullWidth
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+                required
+              />
+              <TextField
+                label="Email Address"
+                variant="outlined"
+                fullWidth
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+                required
+              />
+              <TextField
+                label="Phone Number"
+                variant="outlined"
+                fullWidth
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+                required
+              />
+              <TextField
+                label="Address"
+                variant="outlined"
+                fullWidth
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+                required
+              />
+              <TextField
+                label="LinkedIn Profile (Optional)"
+                variant="outlined"
+                fullWidth
+                name="linkedIn"
+                value={formData.linkedIn}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+              />
+              <TextField
+                label="Cover Letter"
+                variant="outlined"
+                fullWidth
+                name="coverLetter"
+                value={formData.coverLetter}
+                onChange={handleChange}
+                sx={{ marginBottom: "1rem" }}
+                multiline
+                rows={4}
+                required
+              />
+              <Typography sx={{ marginBottom: "0.5rem" }}>Upload Resume (PDF Only):</Typography>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleFileChange}
+                required
+                style={{ marginBottom: "1rem", display: "block" }}
+              />
+              <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 3 }}>
+                <Button variant="contained" color="success" type="submit">
+                  Submit Application
+                </Button>
+                <Button variant="outlined" onClick={() => navigate(-1)}>
+                  Back to Job Details
+                </Button>
+              </Box>
+            </form>
+          </CardContent>
+        </Card>
+      </Paper>
+    </Box>
   );
 }
 

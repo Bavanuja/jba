@@ -7,22 +7,18 @@ function JobDetails() {
   const [job, setJob] = useState(null);
 
   useEffect(() => {
-    fetch("/jobs.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const selectedJob = data.find((job) => job.id === parseInt(id));
-        setJob(selectedJob);
-      })
-      .catch((error) => console.error("Error loading job details:", error));
+    const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    const selectedJob = storedJobs.find((job) => job.id === parseInt(id)); // Ensure id is an integer
+    setJob(selectedJob);
   }, [id]);
 
   if (!job) {
-    return <Typography>Loading job details...</Typography>;
+    return <Typography textAlign="center" sx={{ marginTop: "2rem" }}>Loading job details...</Typography>;
   }
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem",width: "100vw"}}>
-      <Paper sx={{ padding: 4, maxWidth: 600, width: "100%"}}>
+    <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem", width: "100vw" }}>
+      <Paper sx={{ padding: 4, maxWidth: 600, width: "100%" }}>
         <Card variant="outlined">
           <CardContent>
             <Typography variant="h5" sx={{ fontWeight: "bold", color: "#1976D2" }}>
@@ -38,11 +34,14 @@ function JobDetails() {
             <Typography variant="body2" sx={{ marginTop: 2, lineHeight: 1.6 }}>
               <strong>About Job:</strong> {job.about}
             </Typography>
+            <Typography variant="body2" sx={{ marginTop: 2 }}>
+              <strong>Posted on:</strong> {job.postedOn}
+            </Typography>
             <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 3 }}>
               <Button variant="contained" color="success" component={Link} to={`/apply/${job.id}`}>
                 Apply Now
               </Button>
-              <Button variant="outlined" component={Link} to="/">
+              <Button variant="outlined" component={Link} to="/joblist">
                 Back to Jobs
               </Button>
             </Box>
