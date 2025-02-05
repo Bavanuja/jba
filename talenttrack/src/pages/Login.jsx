@@ -24,21 +24,57 @@ function Login() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-      <Paper sx={{ padding: 4, width: 400 }}>
+    <Box 
+      display="flex" 
+      justifyContent="center" 
+      alignItems="center" 
+      minHeight="100vh"
+      width="100vw" 
+      sx={{
+        backgroundColor: "#ffffff",
+        display: "flex"
+      }}
+    >
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          padding: 4, 
+          width: "100%", 
+          maxWidth: 400, 
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center"
+        }}
+      >
         <Typography variant="h4" gutterBottom textAlign="center">
           Login
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <Stack spacing={2}>
-            <TextField label="Email" name="email" value={credentials.email} onChange={handleChange} required />
-            <TextField label="Password" name="password" type="password" value={credentials.password} onChange={handleChange} required />
-            <Button type="submit" variant="contained">Login</Button>
-            <Button variant="outlined" onClick={() => navigate("/register")}>Create Account</Button>
+            <TextField 
+              label="Email" 
+              name="email" 
+              value={credentials.email} 
+              onChange={handleChange} 
+              required 
+              fullWidth 
+            />
+            <TextField 
+              label="Password" 
+              name="password" 
+              type="password" 
+              value={credentials.password} 
+              onChange={handleChange} 
+              required 
+              fullWidth 
+            />
+            <Button type="submit" variant="contained" fullWidth>Login</Button>
+            <Button variant="outlined" onClick={() => navigate("/register")} fullWidth>Create Account</Button>
           </Stack>
         </form>
       </Paper>
     </Box>
   );
 }
+
 export default Login;
