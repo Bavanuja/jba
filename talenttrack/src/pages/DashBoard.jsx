@@ -20,7 +20,7 @@ function Dashboard() {
   return (
     <div>
       <Navbar />
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2rem" }}>
+      <Box width="100vw"  sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2rem",backgroundColor: "#ffffff" }}>
         <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "1rem" }}>Dashboard</Typography>
 
         {applications.length === 0 ? (

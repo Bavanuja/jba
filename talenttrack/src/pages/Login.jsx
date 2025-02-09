@@ -32,7 +32,6 @@ function Login() {
       width="100vw" 
       sx={{
         backgroundColor: "#ffffff",
-        display: "flex"
       }}
     >
       <Paper 

@@ -49,7 +49,15 @@ function Profile() {
   return (
     <>
       <Navbar />
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Box display="flex" 
+      justifyContent="center" 
+      alignItems="center" 
+      minHeight="100vh"
+      width="100vw" 
+      sx={{
+        backgroundColor: "#ffffff",
+        display: "flex"
+      }}>
         <Container maxWidth="sm">
           <Paper elevation={3} sx={{ padding: 4, textAlign: "center", borderRadius: 3 }}>
             

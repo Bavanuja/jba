@@ -23,7 +23,15 @@ function Register() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+    <Box display="flex" 
+    justifyContent="center" 
+    alignItems="center" 
+    minHeight="100vh"
+    width="100vw" 
+    sx={{
+      backgroundColor: "#ffffff",
+      display: "flex"
+    }}>
       <Paper sx={{ padding: 4, width: 400 }}>
         <Typography variant="h4" gutterBottom textAlign="center">
           Register
