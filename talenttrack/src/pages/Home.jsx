@@ -129,7 +129,7 @@ function Home() {
                   View my Jobs
                 </Typography>
                 <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                  View your own posted jobs.
+                Manage and track all the jobs you've posted, stay in control of your hiring process.
                 </Typography>
                 <Button
                   variant="outlined"
