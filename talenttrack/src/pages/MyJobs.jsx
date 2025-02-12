@@ -1,71 +1,124 @@
-// src/pages/MyJobs.jsx
+// src/pages/PostJob.jsx
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Card, CardContent, Typography, Button, Box, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import Navbar from "./Navbar";
 
-function MyJobs() {
-  const [jobs, setJobs] = useState([]);
+function PostJob() {
   const navigate = useNavigate();
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/jobs?postedBy=${loggedInUser.id}`)
-      .then((res) => setJobs(res.data))
-      .catch((err) => console.error("Error fetching my jobs:", err));
-  }, [loggedInUser.id]);
+  // Check if there's an existing job to edit in localStorage
+  const storedEditJob = localStorage.getItem("editJob");
+  const editJob = storedEditJob ? JSON.parse(storedEditJob) : null;
 
-  const handleDelete = async (jobId) => {
-    try {
-      await axios.delete(`http://localhost:3001/jobs/${jobId}`);
-      // Update state after deletion
-      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
-    } catch (error) {
-      console.error("Error deleting job:", error);
+  // Setup initial form state. If editing, prefill with existing job data.
+  const [jobData, setJobData] = useState({
+    title: "",
+    company: "",
+    location: "",
+    salary: "",
+    about: ""
+  });
+
+  useEffect(() => {
+    if (editJob) {
+      setJobData(editJob);
     }
+  }, [editJob]);
+
+  const handleChange = (e) => {
+    setJobData({ ...jobData, [e.target.name]: e.target.value });
   };
 
-  const handleEdit = (job) => {
-    // For editing, we can temporarily save the job in localStorage
-    localStorage.setItem("editJob", JSON.stringify(job));
-    navigate("/postjob");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (editJob) {
+        // Update the existing job instead of creating a new one.
+        await axios.put(`http://localhost:3001/jobs/${editJob.id}`, {
+          ...jobData,
+          postedBy: loggedInUser.id,
+          postedOn: new Date().toLocaleDateString(),
+          // Retain existing applications if they exist
+          applications: editJob.applications || []
+        });
+        // Clear the temporary edit job data after updating.
+        localStorage.removeItem("editJob");
+      } else {
+        // Create a new job posting.
+        await axios.post(`http://localhost:3001/jobs`, {
+          ...jobData,
+          postedBy: loggedInUser.id,
+          postedOn: new Date().toLocaleDateString(),
+          applications: []
+        });
+      }
+      navigate("/myjobs");
+    } catch (error) {
+      console.error("Error submitting job:", error);
+    }
   };
 
   return (
     <>
       <Navbar />
-      <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem", width:"95vw" }}>
-        <Paper sx={{ padding: 4, maxWidth: 800, width: "100%" }}>
-          <Typography variant="h4" textAlign="center" sx={{ marginBottom: "1rem" }}>
-            My Posted Jobs
+      <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "600px" }}>
+          <Typography variant="h4" textAlign="center" marginBottom={2}>
+            {editJob ? "Edit Job" : "Post a New Job"}
           </Typography>
-          {jobs.length > 0 ? (
-            jobs.map((job) => (
-              <Card key={job.id} variant="outlined" sx={{ marginBottom: "1rem" }}>
-                <CardContent>
-                  <Typography variant="h5">{job.title}</Typography>
-                  <Typography color="textSecondary">{job.company}</Typography>
-                  <Typography color="textSecondary">{job.location}</Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
-                    <Button variant="contained" color="primary" onClick={() => handleEdit(job)}>
-                      Edit
-                    </Button>
-                    <Button variant="contained" color="error" onClick={() => handleDelete(job.id)}>
-                      Delete
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <Typography textAlign="center">No jobs posted yet.</Typography>
-          )}
-        </Paper>
+          <TextField
+            label="Title"
+            name="title"
+            value={jobData.title}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Company"
+            name="company"
+            value={jobData.company}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Location"
+            name="location"
+            value={jobData.location}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Salary"
+            name="salary"
+            value={jobData.salary}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="About"
+            name="about"
+            value={jobData.about}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4}
+          />
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
+            {editJob ? "Update Job" : "Post Job"}
+          </Button>
+        </form>
       </Box>
     </>
   );
 }
 
-export default MyJobs;
+export default PostJob;
