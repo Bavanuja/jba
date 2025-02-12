@@ -1,4 +1,3 @@
-// src/pages/Apply.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -23,7 +22,7 @@ function Apply() {
     address: "",
     linkedIn: "",
     coverLetter: "",
-    resume: null, // CV file (handled locally)
+    resume: null,
   });
 
   useEffect(() => {
@@ -57,20 +56,18 @@ function Apply() {
       applicantAddress: formData.address,
       applicantLinkedIn: formData.linkedIn,
       applicantCoverLetter: formData.coverLetter,
-      // You can add other fields as needed, such as a timestamp
-    };
+      };
 
     try {
-      // First, get the current job data
       const res = await axios.get(`http://localhost:3001/jobs/${id}`);
       const currentJob = res.data;
-      // Append the new application to the existing applications array (or create one if missing)
+
       const updatedApplications = currentJob.applications
         ? [...currentJob.applications, newApplication]
         : [newApplication];
       const updatedJob = { ...currentJob, applications: updatedApplications };
 
-      // Update the job record with the new applications array
+      
       await axios.put(`http://localhost:3001/jobs/${id}`, updatedJob);
 
       alert("Application submitted successfully!");
@@ -126,6 +123,7 @@ function Apply() {
                 label="Phone Number"
                 variant="outlined"
                 fullWidth
+                type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}

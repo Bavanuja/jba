@@ -1,4 +1,3 @@
-// src/pages/JobList.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, CardContent, Typography, Button, Box, Paper, Stack } from "@mui/material";

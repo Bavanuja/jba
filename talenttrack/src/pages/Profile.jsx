@@ -15,7 +15,7 @@ function Profile() {
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  // Update state if user logs in again
+  
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (storedUser) {
@@ -23,12 +23,12 @@ function Profile() {
     }
   }, []);
 
-  // Handle input change
+ 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // Handle profile picture upload
+  
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -40,7 +40,7 @@ function Profile() {
     }
   };
 
-  // Save updated profile data
+  
   const handleSave = () => {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
     setIsEditing(false);
@@ -61,7 +61,7 @@ function Profile() {
         <Container maxWidth="sm">
           <Paper elevation={3} sx={{ padding: 4, textAlign: "center", borderRadius: 3 }}>
             
-            {/* Profile Picture */}
+            
             <Box position="relative" display="inline-block">
               <Avatar src={user.profilePic} alt={user.name} sx={{ width: 120, height: 120, margin: "auto" }} />
               {isEditing && (

@@ -8,7 +8,7 @@ function Home() {
     <Box
       sx={{
         backgroundColor: "#ffffff",
-        minHeight: "100vh", // Full viewport height
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -142,24 +142,7 @@ function Home() {
               </Paper>
             </Grid>
           </Grid>
-
-          <Box sx={{ marginTop: 5 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              component={Link}
-              to="/joblist"
-              sx={{
-                padding: "12px 30px",
-                fontSize: "16px",
-                fontWeight: "bold",
-                borderRadius: 3,
-              }}
-            >
-              Explore Job Listings
-            </Button>
-          </Box>
-        </Paper>
+      </Paper>
       </Container>
     </Box>
   );

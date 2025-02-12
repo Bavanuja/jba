@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // First, check if the user already exists
+     
       const res = await axios.get(`http://localhost:3001/users?email=${user.email}`);
       if (res.data.length > 0) {
         alert("User already exists! Please log in.");

@@ -1,4 +1,3 @@
-// src/pages/MyJobs.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -15,10 +14,10 @@ import Navbar from "./Navbar";
 
 function MyJobs() {
   const [jobs, setJobs] = useState([]);
-  // Keep track of which job is currently being edited
+ 
   const [editingJobId, setEditingJobId] = useState(null);
 
-  // Temporary state to hold edit form data
+  
   const [editFormData, setEditFormData] = useState({
     title: "",
     company: "",
@@ -47,9 +46,9 @@ function MyJobs() {
   };
 
   const handleEdit = (job) => {
-    // Set the job that we are editing
+    
     setEditingJobId(job.id);
-    // Load its current data into our edit form state
+    
     setEditFormData({
       title: job.title,
       company: job.company,
@@ -66,7 +65,7 @@ function MyJobs() {
     });
   };
 
-  // Save the changes (PUT request to update job in JSON Server)
+  
   const handleEditSubmit = async (jobId) => {
     try {
       await axios.put(`http://localhost:3001/jobs/${jobId}`, {
@@ -74,21 +73,21 @@ function MyJobs() {
         ...editFormData,
       });
 
-      // Update jobs in state
+      
       setJobs((prevJobs) =>
         prevJobs.map((job) =>
           job.id === jobId ? { ...job, ...editFormData } : job
         )
       );
 
-      // Clear editing state
+      
       setEditingJobId(null);
     } catch (error) {
       console.error("Error updating job:", error);
     }
   };
 
-  // Cancel editing
+ 
   const handleCancelEdit = () => {
     setEditingJobId(null);
   };
@@ -110,7 +109,7 @@ function MyJobs() {
                 <Card key={job.id} variant="outlined" sx={{ marginBottom: "1rem" }}>
                   <CardContent>
                     {isEditing ? (
-                      // If this job is being edited, show text fields
+                     
                       <>
                         <TextField
                           name="title"
@@ -169,7 +168,7 @@ function MyJobs() {
                         </Box>
                       </>
                     ) : (
-                      // Otherwise, just show the job details
+                      
                       <>
                         <Typography variant="h5">{job.title}</Typography>
                         <Typography color="textSecondary">{job.company}</Typography>

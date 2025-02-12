@@ -13,11 +13,11 @@ import Dashboard from "./pages/DashBoard";
 
 
 function App() {
-  const [jobs, setJobs] = useState([]); // Store job data
+  const [jobs, setJobs] = useState([]); 
 
-  // Function to add a new job
+  
   const addJob = (newJob) => {
-    setJobs([...jobs, { ...newJob, id: jobs.length + 1 }]); // Assign an ID
+    setJobs([...jobs, { ...newJob, id: jobs.length + 1 }]); 
   };
   return (
     <Router>

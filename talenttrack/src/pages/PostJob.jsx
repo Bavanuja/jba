@@ -1,4 +1,3 @@
-// src/pages/PostJob.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +8,7 @@ function PostJob() {
   const navigate = useNavigate();
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   
-  // If you previously saved an "editJob" in localStorage for editing, grab it:
+ 
   const existingJob = JSON.parse(localStorage.getItem("editJob"));
   
   const [job, setJob] = useState(
@@ -19,9 +18,9 @@ function PostJob() {
       location: "",
       salary: "",
       about: "",
-      postedBy: loggedInUser?.id, // Save the logged-in user's ID
+      postedBy: loggedInUser?.id, 
       postedOn: new Date().toLocaleDateString(),
-      applications: [] // Initialize empty applications array
+      applications: [] 
     }
   );
 
@@ -46,10 +45,10 @@ function PostJob() {
     
     try {
       if (existingJob) {
-        // Update existing job
+        
         await axios.put(`http://localhost:3001/jobs/${job.id}`, job);
       } else {
-        // Create a new job
+        
         await axios.post("http://localhost:3001/jobs", job);
       }
       alert("Job posted successfully!");

@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,13 +13,13 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Query the JSON server for a matching user
+      
       const res = await axios.get(
         `http://localhost:3001/users?email=${credentials.email}&password=${credentials.password}`
       );
       if (res.data.length > 0) {
         const user = res.data[0];
-        // Optionally keep the logged-in user in localStorage (or in global state)
+       
         localStorage.setItem("loggedInUser", JSON.stringify(user));
         alert("Login successful!");
         navigate("/home");

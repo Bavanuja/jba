@@ -1,4 +1,3 @@
-// src/pages/DashBoard.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, CardContent, Typography, Box, Paper } from "@mui/material";
