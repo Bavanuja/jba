@@ -1,0 +1,66 @@
+{
+  "users": [
+    {
+      "id": "6244",
+      "name": "bavanuja",
+      "email": "bbavanuja@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "5930",
+      "name": "arushan",
+      "email": "rockarush2@gmail.com",
+      "password": "0000"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "0242",
+      "title": "SE",
+      "company": "99x",
+      "location": "colombo",
+      "salary": "100000",
+      "about": "its a very good job",
+      "postedBy": "6244",
+      "postedOn": "2/12/2025",
+      "applications": [
+        {
+          "applicantName": "arushan",
+          "applicantEmail": "rockarush2@gmail.com",
+          "applicantPhone": "1234567890",
+          "applicantAddress": "bsv,jbdz,jfbjvzd",
+          "applicantLinkedIn": "kjdshgkjfbhg",
+          "applicantCoverLetter": "jfngvkbfkjgd"
+        },
+        {
+          "applicantName": "jv,jvmnjvb",
+          "applicantEmail": "fgnnxnvg@gmail.com",
+          "applicantPhone": "7567487877",
+          "applicantAddress": "vbnvnb",
+          "applicantLinkedIn": "kjgjhghjg",
+          "applicantCoverLetter": "bbvmvm"
+        }
+      ]
+    },
+    {
+      "id": "0242",
+      "title": "SE",
+      "company": "99x",
+      "location": "colombo",
+      "salary": "200000",
+      "about": "its a very good job",
+      "postedBy": "6244",
+      "postedOn": "2/12/2025",
+      "applications": [
+        {
+          "applicantName": "arushan",
+          "applicantEmail": "rockarush2@gmail.com",
+          "applicantPhone": "1234567890",
+          "applicantAddress": "bsv,jbdz,jfbjvzd",
+          "applicantLinkedIn": "kjdshgkjfbhg",
+          "applicantCoverLetter": "jfngvkbfkjgd"
+        }
+      ]
+    }
+  ]
+}
