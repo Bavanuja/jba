@@ -41,7 +41,8 @@ function Register() {
             <TextField label="Name" name="name" value={user.name} onChange={handleChange} required />
             <TextField label="Email" name="email" value={user.email} onChange={handleChange} required />
             <TextField label="Password" name="password" type="password" value={user.password} onChange={handleChange} required />
-            <Button type="submit" variant="contained">Create Account</Button>
+            <Button type="submit" variant="contained" fullWidth>Create Account</Button>
+            <Button variant="outlined" onClick={() => navigate("/")} fullWidth>Back</Button>
           </Stack>
         </form>
       </Paper>
