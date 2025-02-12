@@ -1,123 +1,133 @@
 // src/pages/PostJob.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { TextField, Button, Box, Typography } from "@mui/material";
-import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Box, Paper, Typography } from "@mui/material";
 
 function PostJob() {
   const navigate = useNavigate();
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-  // Check if there's an existing job to edit in localStorage
-  const storedEditJob = localStorage.getItem("editJob");
-  const editJob = storedEditJob ? JSON.parse(storedEditJob) : null;
-
-  // Setup initial form state. If editing, prefill with existing job data.
+  // Initial state for the job form
   const [jobData, setJobData] = useState({
     title: "",
     company: "",
     location: "",
     salary: "",
-    about: ""
+    about: "",
   });
+  const [isEditing, setIsEditing] = useState(false);
 
+  // Check if there's an editJob stored in localStorage when the component mounts
   useEffect(() => {
+    const editJob = localStorage.getItem("editJob");
     if (editJob) {
-      setJobData(editJob);
+      setJobData(JSON.parse(editJob));
+      setIsEditing(true);
     }
-  }, [editJob]);
+  }, []);
 
   const handleChange = (e) => {
-    setJobData({ ...jobData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setJobData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      if (editJob) {
-        // Update the existing job instead of creating a new one.
-        await axios.put(`http://localhost:3001/jobs/${editJob.id}`, {
+      if (isEditing) {
+        // Update the existing job using PUT request
+        await axios.put(`http://localhost:3001/jobs/${jobData.id}`, {
           ...jobData,
           postedBy: loggedInUser.id,
-          postedOn: new Date().toLocaleDateString(),
-          // Retain existing applications if they exist
-          applications: editJob.applications || []
         });
-        // Clear the temporary edit job data after updating.
+        // Clear the edit flag after update
         localStorage.removeItem("editJob");
       } else {
-        // Create a new job posting.
-        await axios.post(`http://localhost:3001/jobs`, {
+        // Create a new job using POST request
+        await axios.post("http://localhost:3001/jobs", {
           ...jobData,
           postedBy: loggedInUser.id,
           postedOn: new Date().toLocaleDateString(),
-          applications: []
         });
       }
       navigate("/myjobs");
     } catch (error) {
-      console.error("Error submitting job:", error);
+      console.error("Error posting/updating job:", error);
     }
   };
 
   return (
-    <>
-      <Navbar />
-      <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
-        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "600px" }}>
-          <Typography variant="h4" textAlign="center" marginBottom={2}>
-            {editJob ? "Edit Job" : "Post a New Job"}
-          </Typography>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        padding: "2rem",
+        width: "95vw",
+      }}
+    >
+      <Paper sx={{ padding: 4, maxWidth: 600, width: "100%" }}>
+        <Typography
+          variant="h4"
+          textAlign="center"
+          sx={{ marginBottom: "1rem" }}
+        >
+          {isEditing ? "Edit Job" : "Post a Job"}
+        </Typography>
+        <form onSubmit={handleSubmit}>
           <TextField
+            fullWidth
             label="Title"
             name="title"
             value={jobData.title}
             onChange={handleChange}
-            fullWidth
             margin="normal"
+            required
           />
           <TextField
+            fullWidth
             label="Company"
             name="company"
             value={jobData.company}
             onChange={handleChange}
-            fullWidth
             margin="normal"
+            required
           />
           <TextField
+            fullWidth
             label="Location"
             name="location"
             value={jobData.location}
             onChange={handleChange}
-            fullWidth
             margin="normal"
+            required
           />
           <TextField
+            fullWidth
             label="Salary"
             name="salary"
             value={jobData.salary}
             onChange={handleChange}
-            fullWidth
             margin="normal"
+            required
           />
           <TextField
+            fullWidth
             label="About"
             name="about"
             value={jobData.about}
             onChange={handleChange}
-            fullWidth
             margin="normal"
+            required
             multiline
             rows={4}
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
-            {editJob ? "Update Job" : "Post Job"}
+          <Button variant="contained" type="submit" sx={{ marginTop: 2 }}>
+            {isEditing ? "Update Job" : "Post Job"}
           </Button>
         </form>
-      </Box>
-    </>
+      </Paper>
+    </Box>
   );
 }
 
