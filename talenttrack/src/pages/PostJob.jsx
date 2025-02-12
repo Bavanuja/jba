@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+// src/pages/PostJob.jsx
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Paper, Typography, Stack } from "@mui/material";
 import Navbar from "./Navbar";
@@ -7,6 +9,7 @@ function PostJob() {
   const navigate = useNavigate();
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   
+  // If you previously saved an "editJob" in localStorage for editing, grab it:
   const existingJob = JSON.parse(localStorage.getItem("editJob"));
   
   const [job, setJob] = useState(
@@ -16,9 +19,9 @@ function PostJob() {
       location: "",
       salary: "",
       about: "",
-      postedBy: loggedInUser?.id, // Use logged-in user's ID
-      id: Date.now(), // Assigning a unique ID using the current timestamp
-      postedOn: new Date().toLocaleDateString(), // Storing the current date
+      postedBy: loggedInUser?.id, // Save the logged-in user's ID
+      postedOn: new Date().toLocaleDateString(),
+      applications: [] // Initialize empty applications array
     }
   );
 
@@ -26,13 +29,13 @@ function PostJob() {
     if (existingJob) {
       localStorage.removeItem("editJob");
     }
-  }, []);
+  }, [existingJob]);
 
   const handleChange = (e) => {
     setJob({ ...job, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!loggedInUser) {
@@ -41,23 +44,24 @@ function PostJob() {
       return;
     }
     
-    let allJobs = JSON.parse(localStorage.getItem("jobs")) || [];
-
-    // If editing an existing job, update the job details
-    if (existingJob) {
-      allJobs = allJobs.map((j) => (j.id === existingJob.id ? job : j)); // Use job ID to edit
-    } else {
-      allJobs.push(job); // Add the new job if it's a new post
+    try {
+      if (existingJob) {
+        // Update existing job
+        await axios.put(`http://localhost:3001/jobs/${job.id}`, job);
+      } else {
+        // Create a new job
+        await axios.post("http://localhost:3001/jobs", job);
+      }
+      alert("Job posted successfully!");
+      navigate("/joblist");
+    } catch (error) {
+      console.error("Job posting error:", error);
+      alert("An error occurred while posting the job.");
     }
-
-    localStorage.setItem("jobs", JSON.stringify(allJobs));
-
-    alert("Job posted successfully!");
-    navigate("/joblist"); // Redirect to job list after posting the job
   };
 
   return (
-    <div>
+    <>
       <Navbar />
       <Box sx={{ display: "flex", justifyContent: "center", padding: "2rem", width: "95vw" }}>
         <Paper sx={{ padding: 4, maxWidth: 600, width: "100%" }}>
@@ -110,7 +114,7 @@ function PostJob() {
           </form>
         </Paper>
       </Box>
-    </div>
+    </>
   );
 }
 

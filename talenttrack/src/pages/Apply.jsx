@@ -1,6 +1,16 @@
-import { useEffect, useState } from "react";
+// src/pages/Apply.jsx
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, CardContent, Typography, TextField, Button, Box, Paper } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Paper
+} from "@mui/material";
 
 function Apply() {
   const { id } = useParams();
@@ -13,13 +23,14 @@ function Apply() {
     address: "",
     linkedIn: "",
     coverLetter: "",
-    resume: null, // Resume file
+    resume: null, // CV file (handled locally)
   });
 
   useEffect(() => {
-    const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
-    const selectedJob = storedJobs.find((job) => job.id === parseInt(id));
-    setJob(selectedJob);
+    axios
+      .get(`http://localhost:3001/jobs/${id}`)
+      .then((res) => setJob(res.data))
+      .catch((err) => console.error("Error fetching job for application:", err));
   }, [id]);
 
   const handleChange = (e) => {
@@ -31,38 +42,51 @@ function Apply() {
     setFormData({ ...formData, resume: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!formData.resume) {
       alert("Please upload your resume.");
       return;
     }
-  
-    const storedApplications = JSON.parse(localStorage.getItem("applications")) || [];
-    
+
     const newApplication = {
-      jobId: job.id,
-      jobTitle: job.title,
       applicantName: formData.name,
       applicantEmail: formData.email,
       applicantPhone: formData.phone,
       applicantAddress: formData.address,
       applicantLinkedIn: formData.linkedIn,
       applicantCoverLetter: formData.coverLetter,
-      jobPosterId: job.postedBy, // ID of the user who posted the job
+      // You can add other fields as needed, such as a timestamp
     };
-  
-    storedApplications.push(newApplication);
-    localStorage.setItem("applications", JSON.stringify(storedApplications));
-  
-    alert("Application submitted successfully!");
-    navigate("/joblist"); // Redirect to home page
+
+    try {
+      // First, get the current job data
+      const res = await axios.get(`http://localhost:3001/jobs/${id}`);
+      const currentJob = res.data;
+      // Append the new application to the existing applications array (or create one if missing)
+      const updatedApplications = currentJob.applications
+        ? [...currentJob.applications, newApplication]
+        : [newApplication];
+      const updatedJob = { ...currentJob, applications: updatedApplications };
+
+      // Update the job record with the new applications array
+      await axios.put(`http://localhost:3001/jobs/${id}`, updatedJob);
+
+      alert("Application submitted successfully!");
+      navigate("/joblist");
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert("An error occurred while submitting your application.");
+    }
   };
-  
 
   if (!job) {
-    return <Typography textAlign="center" sx={{ marginTop: "2rem" }}>Loading job details...</Typography>;
+    return (
+      <Typography textAlign="center" sx={{ marginTop: "2rem" }}>
+        Loading job details...
+      </Typography>
+    );
   }
 
   return (

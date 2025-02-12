@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+// src/pages/JobDetails.jsx
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardContent, Typography, Button, Box, Paper } from "@mui/material";
 
@@ -7,13 +9,18 @@ function JobDetails() {
   const [job, setJob] = useState(null);
 
   useEffect(() => {
-    const storedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
-    const selectedJob = storedJobs.find((job) => job.id === parseInt(id)); // Ensure id is an integer
-    setJob(selectedJob);
+    axios
+      .get(`http://localhost:3001/jobs/${id}`)
+      .then((res) => setJob(res.data))
+      .catch((err) => console.error("Error fetching job details:", err));
   }, [id]);
 
   if (!job) {
-    return <Typography textAlign="center" sx={{ marginTop: "2rem" }}>Loading job details...</Typography>;
+    return (
+      <Typography textAlign="center" sx={{ marginTop: "2rem" }}>
+        Loading job details...
+      </Typography>
+    );
   }
 
   return (
